@@ -78,7 +78,7 @@ export function CourseForm({ children }: PropsWithChildren) {
           <CardTitle>Course schedule generator</CardTitle>
           <CardDescription>
             Enter your 5-digit course reference numbers (CRNs) below to generate
-            an Apple Calendar file to import into your calendar.
+            an importable iCalendar file.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
