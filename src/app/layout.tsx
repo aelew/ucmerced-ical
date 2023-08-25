@@ -15,7 +15,7 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: 'UC Merced iCal Tool',
   description:
-    'A simple tool for importing UC Merced course schedules into your calendar with support for Apple Calendar, Google Calendar, and other calendars that accept ICS files.',
+    'A simple tool for importing UC Merced course schedules into Apple Calendar, Google Calendar, and other calendars that accept ICS files.',
   themeColor: [
     { media: '(prefers-color-scheme: light)', color: 'white' },
     { media: '(prefers-color-scheme: dark)', color: 'black' }
