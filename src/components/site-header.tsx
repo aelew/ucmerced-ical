@@ -21,11 +21,7 @@ export function SiteHeader() {
         </Link>
         <nav className="flex flex-1 items-center justify-end space-x-1">
           <ThemeSwitcher />
-          <Link
-            href="https://github.com/aelew/ucmerced-calendar"
-            rel="noreferrer"
-            target="_blank"
-          >
+          <Link href="https://github.com/aelew/ucmerced-ical" target="_blank">
             <div className={buttonVariants({ size: 'icon', variant: 'ghost' })}>
               <GitHubLogoIcon className="h-5 w-5" />
               <span className="sr-only">GitHub</span>
