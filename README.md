@@ -1,6 +1,7 @@
 # 📆 UC Merced iCal Tool
 
-A simple tool for importing UC Merced course schedules into Apple Calendar, Google Calendar, and other calendars that accept ICS files.  
+A simple tool for importing UC Merced course schedules into Apple Calendar, Google Calendar, and other calendars that accept ICS files.
+
 This project is inspired by [ryanlee68](https://github.com/ryanlee68)'s [merced_calendar](https://github.com/ryanlee68/merced_calendar). You can [check it out here](https://ryanllee.com)!
 
 ## Built with
