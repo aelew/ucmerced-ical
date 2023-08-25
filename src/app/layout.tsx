@@ -2,6 +2,7 @@ import { cn } from '@/lib/utils';
 
 import './globals.css';
 
+import { Analytics } from '@vercel/analytics/react';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { PropsWithChildren } from 'react';
@@ -46,6 +47,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
           </div>
           <Sonner />
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );
