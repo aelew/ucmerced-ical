@@ -4,6 +4,7 @@ import { z } from 'zod';
 
 import { TZ_DATA, WEEK_DAYS } from '@/lib/constants';
 import { getClassDetails, getInstructorMeetingTimes } from '@/lib/ucm';
+import { InstructorMeetingTimesResponse } from '@/types/ucm';
 
 const schema = z.object({
   term: z.string(),
@@ -25,24 +26,38 @@ export async function POST(request: Request) {
   if (!crns.length) {
     return NextResponse.json(
       { error: 'Please enter at least 1 CRN!' },
-      { status: 400 }
+      { status: 422 }
     );
   }
 
   if (term === '') {
     return NextResponse.json(
       { error: 'Please select a term!' },
-      { status: 400 }
+      { status: 422 }
     );
   }
 
   // Get class details and meeting times for each CRN
-  const courses = await Promise.all(
-    crns.map(async (crn) => ({
-      details: await getClassDetails(term, crn),
-      classes: await getInstructorMeetingTimes(term, crn)
-    }))
-  );
+  const courses: {
+    details: string;
+    classes: InstructorMeetingTimesResponse['fmt'];
+  }[] = [];
+  for (const crn of crns) {
+    let details;
+    try {
+      details = await getClassDetails(term, crn);
+    } catch {
+      return NextResponse.json(
+        {
+          error:
+            `Failed to locate class details for CRN ${crn}. ` +
+            'Please check your CRN and try again.'
+        },
+        { status: 422 }
+      );
+    }
+    return { details, classes: await getInstructorMeetingTimes(term, crn) };
+  }
 
   // Create an event for each class
   const eventData: EventAttributes[] = [];
