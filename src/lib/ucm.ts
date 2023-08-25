@@ -26,7 +26,7 @@ export async function getInstructorMeetingTimes(term: string, crn: string) {
   searchParams.set('term', term);
   searchParams.set('courseReferenceNumber', crn);
   const { fmt } = await api
-    .get('ssb/searchResults/getFacultyMeetingTimes', { searchParams })
+    .get('searchResults/getFacultyMeetingTimes', { searchParams })
     .json<InstructorMeetingTimesResponse>();
   return fmt;
 }
