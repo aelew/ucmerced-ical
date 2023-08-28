@@ -16,6 +16,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
+import { Switch } from './ui/switch';
 
 export function CourseForm({ children }: PropsWithChildren) {
   const [generating, setGenerating] = useState(false);
@@ -27,6 +28,7 @@ export function CourseForm({ children }: PropsWithChildren) {
     fetch('/api/generate', {
       body: JSON.stringify({
         term: e.currentTarget.term.value,
+        condense: e.currentTarget.condense.checked,
         crns: crns.filter((crn) => !!crn)
       }),
       headers: { 'content-type': 'application/json' },
@@ -100,6 +102,21 @@ export function CourseForm({ children }: PropsWithChildren) {
                 />
               </div>
             ))}
+          </div>
+          <div className="flex items-center space-x-2 pt-2">
+            <Switch
+              name="condense"
+              defaultChecked={true}
+              id="condense-course-names"
+            />
+            <div className="items-baseline gap-2 sm:flex">
+              <Label htmlFor="condense-course-names">
+                Condense course names
+              </Label>
+              <p className="text-xs text-muted-foreground">
+                e.g.: Advanced Programming &rarr; CSE 024
+              </p>
+            </div>
           </div>
         </CardContent>
         <CardFooter className="flex-col-reverse gap-2 sm:flex-row sm:gap-6">

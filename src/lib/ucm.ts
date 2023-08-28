@@ -1,6 +1,9 @@
 import ky from 'ky';
 
-import { InstructorMeetingTimesResponse, TermsResponse } from '@/types/ucm';
+import {
+  CodeDescriptionResponse,
+  InstructorMeetingTimesResponse
+} from '@/types/ucm';
 
 const api = ky.create({
   prefixUrl: 'https://reg-prod.ec.ucmerced.edu/StudentRegistrationSsb/ssb',
@@ -10,7 +13,18 @@ const api = ky.create({
 export async function getAcademicTerms() {
   return api
     .get('classSearch/getTerms?searchTerm=&offset=1&max=5')
-    .json<TermsResponse>();
+    .json<CodeDescriptionResponse>();
+}
+
+export async function getSubjects(term: string) {
+  const searchParams = new URLSearchParams();
+  searchParams.set('searchTerm', '');
+  searchParams.set('term', term);
+  searchParams.set('offset', '1');
+  searchParams.set('max', '999');
+  return api
+    .get('classSearch/get_subject', { searchParams })
+    .json<CodeDescriptionResponse>();
 }
 
 export async function getClassDetails(term: string, crn: string) {

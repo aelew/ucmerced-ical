@@ -3,11 +3,16 @@ import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
 import { TZ_DATA, WEEK_DAYS } from '@/lib/constants';
-import { getClassDetails, getInstructorMeetingTimes } from '@/lib/ucm';
+import {
+  getClassDetails,
+  getInstructorMeetingTimes,
+  getSubjects
+} from '@/lib/ucm';
 import { InstructorMeetingTimesResponse } from '@/types/ucm';
 
 const schema = z.object({
   term: z.string(),
+  condense: z.boolean(),
   crns: z.array(z.string().length(5))
 });
 
@@ -22,7 +27,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const { term, crns } = result.data;
+  const { term, condense, crns } = result.data;
   if (!crns.length) {
     return NextResponse.json(
       { error: 'Please enter at least 1 CRN!' },
@@ -56,15 +61,39 @@ export async function POST(request: Request) {
         { status: 422 }
       );
     }
-    return { details, classes: await getInstructorMeetingTimes(term, crn) };
+    courses.push({
+      details,
+      classes: await getInstructorMeetingTimes(term, crn)
+    });
   }
+
+  const subjects = condense ? await getSubjects(term) : [];
 
   // Create an event for each class
   const eventData: EventAttributes[] = [];
   for (const course of courses) {
-    const courseTitle = course.details
-      .split('<span id="courseTitle">')[1]
-      .split('</span>')[0];
+    let courseTitle;
+    if (condense) {
+      const subject = course.details
+        .split('<span id="subject">')[1]
+        .split('</span>')[0];
+      const subjectCode = subjects.find((s) => s.description === subject)?.code;
+      if (subjectCode) {
+        const courseNumber = course.details
+          .split('<span id="courseNumber">')[1]
+          .split('</span>')[0];
+        courseTitle = `${subjectCode} ${courseNumber}`;
+      } else {
+        courseTitle = course.details
+          .split('<span id="courseTitle">')[1]
+          .split('</span>')[0];
+      }
+    } else {
+      courseTitle = course.details
+        .split('<span id="courseTitle">')[1]
+        .split('</span>')[0];
+    }
+
     for (const cls of course.classes) {
       const startDateParts = cls.meetingTime.startDate.split('/');
       const startHour = parseInt(cls.meetingTime.beginTime.slice(0, 2));
@@ -104,11 +133,9 @@ export async function POST(request: Request) {
         location = buildingSlug + ' ' + cls.meetingTime.room;
       }
 
-      const meetingType = cls.meetingTime.meetingTypeDescription.toUpperCase();
-
       eventData.push({
         calName: 'UC Merced',
-        title: `${courseTitle} (${meetingType} - ${cls.meetingTime.courseReferenceNumber})`,
+        title: `${courseTitle} (${cls.meetingTime.meetingTypeDescription} - ${cls.meetingTime.courseReferenceNumber})`,
         recurrenceRule: `FREQ=WEEKLY;BYDAY=${recurrenceDays};UNTIL=${until}`,
         productId: 'aelew/ucmerced-apple-calendar',
         busyStatus: 'BUSY',

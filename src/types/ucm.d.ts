@@ -1,4 +1,4 @@
-export type TermsResponse = { code: string; description: string }[];
+export type CodeDescriptionResponse = { code: string; description: string }[];
 
 export type InstructorMeetingTimesResponse = {
   fmt: {
