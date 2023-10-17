@@ -137,7 +137,7 @@ export async function POST(request: Request) {
         calName: 'UC Merced',
         title: `${courseTitle} (${cls.meetingTime.meetingTypeDescription} - ${cls.meetingTime.courseReferenceNumber})`,
         recurrenceRule: `FREQ=WEEKLY;BYDAY=${recurrenceDays};UNTIL=${until}`,
-        productId: 'aelew/ucmerced-apple-calendar',
+        productId: 'aelew/ucmerced-ical',
         busyStatus: 'BUSY',
         location,
         organizer: {
