@@ -128,7 +128,7 @@ export async function POST(request: Request) {
       if (cls.meetingTime.building) {
         const buildingSlug =
           cls.meetingTime.building === 'CLSSRM'
-            ? 'COB1'
+            ? 'COB'
             : cls.meetingTime.building;
         location = buildingSlug + ' ' + cls.meetingTime.room;
       }
