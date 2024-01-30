@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { ThemeSwitcher } from './theme-switcher';
 import { buttonVariants } from './ui/button';
 
-export function SiteHeader() {
+export function Header() {
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
@@ -17,7 +17,7 @@ export function SiteHeader() {
             height={24}
             width={24}
           />
-          <span className="truncate font-semibold">UC Merced iCal Tool</span>
+          <span className="truncate font-semibold">UC Merced iCalendar Tool</span>
         </Link>
         <nav className="flex flex-1 items-center justify-end space-x-1">
           <ThemeSwitcher />

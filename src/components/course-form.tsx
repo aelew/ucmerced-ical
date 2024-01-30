@@ -26,13 +26,13 @@ export function CourseForm({ children }: PropsWithChildren) {
     e.preventDefault();
     setGenerating(true);
     fetch('/api/generate', {
+      headers: { 'Content-Type': 'application/json' },
+      method: 'POST',
       body: JSON.stringify({
         term: e.currentTarget.term.value,
         condense: e.currentTarget.condense.checked,
         crns: crns.filter((crn) => !!crn)
-      }),
-      headers: { 'content-type': 'application/json' },
-      method: 'POST'
+      })
     })
       .then((response) =>
         response

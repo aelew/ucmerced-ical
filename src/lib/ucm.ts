@@ -7,7 +7,7 @@ import {
 
 const api = ky.create({
   prefixUrl: 'https://reg-prod.ec.ucmerced.edu/StudentRegistrationSsb/ssb',
-  headers: { 'user-agent': 'ucmerced-ical' }
+  headers: { 'User-Agent': 'ucmerced-ical' }
 });
 
 export async function getAcademicTerms() {
