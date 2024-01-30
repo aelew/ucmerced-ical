@@ -1,6 +1,6 @@
 import { Analytics } from '@vercel/analytics/react';
+import { GeistSans } from 'geist/font/sans';
 import type { Metadata, Viewport } from 'next';
-import { Inter } from 'next/font/google';
 import { PropsWithChildren } from 'react';
 
 import { Header } from '@/components/header';
@@ -9,8 +9,6 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { cn } from '@/lib/utils';
 
 import './globals.css';
-
-const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'UC Merced iCalendar Tool',
@@ -39,7 +37,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
       <body
         className={cn(
           'min-h-screen bg-background font-sans antialiased',
-          inter.className
+          GeistSans.className
         )}
       >
         <ThemeProvider defaultTheme="system" attribute="class" enableSystem>
