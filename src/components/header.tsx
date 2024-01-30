@@ -7,8 +7,8 @@ import { buttonVariants } from './ui/button';
 
 export function Header() {
   return (
-    <header className="sticky top-0 z-40 w-full border-b bg-background backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
+    <header className="sticky top-0 z-40 w-full border-b bg-background/50 backdrop-blur">
+      <div className="container flex h-16 items-center gap-4 sm:justify-between sm:gap-0">
         <Link className="flex min-w-0 space-x-2" href="/">
           <Image
             src="/images/calendar.png"
@@ -17,7 +17,9 @@ export function Header() {
             height={24}
             width={24}
           />
-          <span className="truncate font-semibold">UC Merced iCalendar Tool</span>
+          <span className="truncate font-semibold">
+            UC Merced iCalendar Tool
+          </span>
         </Link>
         <nav className="flex flex-1 items-center justify-end space-x-1">
           <ThemeSwitcher />

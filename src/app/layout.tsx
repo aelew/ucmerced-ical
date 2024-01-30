@@ -10,6 +10,8 @@ import { cn } from '@/lib/utils';
 
 import './globals.css';
 
+import { Spotlight } from '@/components/spotlight';
+
 export const metadata: Metadata = {
   title: 'UC Merced iCalendar Tool',
   description:
@@ -36,14 +38,16 @@ export default function RootLayout({ children }: PropsWithChildren) {
       <head />
       <body
         className={cn(
-          'min-h-screen bg-background font-sans antialiased',
+          'min-h-screen bg-background antialiased',
           GeistSans.className
         )}
       >
         <ThemeProvider defaultTheme="system" attribute="class" enableSystem>
+          <div className="fixed -z-10 h-screen w-full bg-gradient-to-br from-violet-100 via-teal-50 to-amber-100 dark:hidden" />
           <div className="relative flex min-h-screen flex-col">
             <Header />
             <div className="flex flex-1">{children}</div>
+            <Spotlight className="-top-40 left-0 hidden dark:block md:-top-20 md:left-60" />
           </div>
           <Sonner />
         </ThemeProvider>
