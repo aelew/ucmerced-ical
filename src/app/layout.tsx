@@ -5,12 +5,11 @@ import { PropsWithChildren } from 'react';
 
 import { Header } from '@/components/header';
 import { Sonner } from '@/components/sonner';
+import { Spotlight } from '@/components/spotlight';
 import { ThemeProvider } from '@/components/theme-provider';
 import { cn } from '@/lib/utils';
 
 import './globals.css';
-
-import { Spotlight } from '@/components/spotlight';
 
 export const metadata: Metadata = {
   title: 'UC Merced iCalendar Tool',
