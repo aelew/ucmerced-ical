@@ -104,7 +104,7 @@ export async function POST(request: Request) {
       const endMins = parseInt(cls.meetingTime.beginTime.slice(2));
 
       const untilArray = incrementDay(
-        convertUtctoPst([
+        convertUTCtoPST([
           parseInt(endDateParts[2]),
           parseInt(endDateParts[0]),
           parseInt(endDateParts[1]),
@@ -161,7 +161,7 @@ export async function POST(request: Request) {
               email: cls.faculty[0].emailAddress
             }
           : undefined,
-        start: convertUtctoPst([
+        start: convertUTCtoPST([
           parseInt(startDateParts[2]),
           parseInt(startDateParts[0]),
           parseInt(startDateParts[1]),
@@ -225,7 +225,7 @@ function calculateDuration(beginTime: string, endTime: string) {
   return differenceInMinutes;
 }
 
-function convertUtctoPst(dateArray: [number, number, number, number, number]) {
+function convertUTCtoPST(dateArray: [number, number, number, number, number]) {
   const [year, month, day, hour, minute] = dateArray;
 
   const date = new Date(Date.UTC(year, month - 1, day, hour, minute));
