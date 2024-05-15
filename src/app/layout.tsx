@@ -1,12 +1,12 @@
 import { Analytics } from '@vercel/analytics/react';
 import { GeistSans } from 'geist/font/sans';
 import type { Metadata, Viewport } from 'next';
+import { ThemeProvider } from 'next-themes';
 import { PropsWithChildren } from 'react';
 
 import { Header } from '@/components/header';
 import { Sonner } from '@/components/sonner';
 import { Spotlight } from '@/components/spotlight';
-import { ThemeProvider } from '@/components/theme-provider';
 import { cn } from '@/lib/utils';
 
 import './globals.css';
