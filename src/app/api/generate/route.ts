@@ -121,8 +121,11 @@ export async function POST(request: Request) {
         .map((day) => day.slice(0, 2).toUpperCase())
         .join(',');
 
-      const displayNameParts = cls.faculty[0].displayName.split(', ');
-      const organizerName = displayNameParts[1] + ' ' + displayNameParts[0];
+      let organizerName;
+      if (cls.faculty.length) {
+        const displayNameParts = cls.faculty[0].displayName.split(', ');
+        organizerName = displayNameParts[1] + ' ' + displayNameParts[0];
+      }
 
       let location;
       if (cls.meetingTime.building) {
@@ -140,10 +143,12 @@ export async function POST(request: Request) {
         productId: 'aelew/ucmerced-ical',
         busyStatus: 'BUSY',
         location,
-        organizer: {
-          name: organizerName,
-          email: cls.faculty[0].emailAddress
-        },
+        organizer: cls.faculty.length
+          ? {
+              name: organizerName,
+              email: cls.faculty[0].emailAddress
+            }
+          : undefined,
         start: convertUtctoPst([
           parseInt(startDateParts[2]),
           parseInt(startDateParts[0]),
