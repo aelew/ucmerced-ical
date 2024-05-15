@@ -102,6 +102,7 @@ export async function POST(request: Request) {
       const endDateParts = cls.meetingTime.endDate.split('/');
       const endHour = parseInt(cls.meetingTime.beginTime.slice(0, 2));
       const endMins = parseInt(cls.meetingTime.beginTime.slice(2));
+
       const untilArray = incrementDay(
         convertUtctoPst([
           parseInt(endDateParts[2]),
@@ -124,16 +125,27 @@ export async function POST(request: Request) {
       let organizerName;
       if (cls.faculty.length) {
         const displayNameParts = cls.faculty[0].displayName.split(', ');
-        organizerName = displayNameParts[1] + ' ' + displayNameParts[0];
+        organizerName = `${displayNameParts[1]} ${displayNameParts[0]}`;
       }
 
       let location;
       if (cls.meetingTime.building) {
-        const buildingSlug =
-          cls.meetingTime.building === 'CLSSRM'
-            ? 'COB'
-            : cls.meetingTime.building;
-        location = buildingSlug + ' ' + cls.meetingTime.room;
+        let building;
+        switch (cls.meetingTime.building) {
+          case 'CLSSRM':
+            building = 'COB';
+            break;
+          case 'KOLLIG':
+            building = 'KL';
+            break;
+          case 'SCIENG':
+            building = 'SE';
+            break;
+          default:
+            building = cls.meetingTime.building;
+            break;
+        }
+        location = `${building} ${cls.meetingTime.room}`;
       }
 
       eventData.push({
