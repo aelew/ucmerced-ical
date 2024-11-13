@@ -12,7 +12,7 @@ const api = ky.create({
 
 export async function getAcademicTerms() {
   const searchParams = new URLSearchParams();
-  searchParams.set('searchTerm', ' ');
+  searchParams.set('searchTerm', '');
   searchParams.set('offset', '1');
   searchParams.set('max', '5');
   return api
