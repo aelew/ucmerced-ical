@@ -133,7 +133,7 @@ export async function POST(request: Request) {
         let building;
         switch (cls.meetingTime.building) {
           case 'CLSSRM':
-            building = 'COB';
+            building = 'COB1';
             break;
           case 'KOLLIG':
             building = 'KL';
