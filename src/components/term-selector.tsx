@@ -5,7 +5,7 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
-import { getAcademicTerms } from '@/lib/ucm';
+import { getAcademicTerms } from '@/lib/ucmerced';
 import { Label } from './ui/label';
 
 export async function TermSelector() {

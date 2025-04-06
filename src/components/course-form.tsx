@@ -1,7 +1,12 @@
 'use client';
 
 import { CalendarIcon, PlusIcon, ReloadIcon } from '@radix-ui/react-icons';
-import { ChangeEvent, FormEvent, PropsWithChildren, useState } from 'react';
+import {
+  useState,
+  type ChangeEvent,
+  type FormEvent,
+  type PropsWithChildren
+} from 'react';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';

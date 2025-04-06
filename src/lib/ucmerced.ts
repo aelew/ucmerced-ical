@@ -1,9 +1,9 @@
 import ky from 'ky';
 
-import {
+import type {
   CodeDescriptionResponse,
   InstructorMeetingTimesResponse
-} from '@/types/ucm';
+} from '@/types/ucmerced';
 
 const api = ky.create({
   prefixUrl: 'https://reg-prod.ec.ucmerced.edu/StudentRegistrationSsb/ssb',
