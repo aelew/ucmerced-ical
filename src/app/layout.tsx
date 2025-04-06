@@ -2,7 +2,7 @@ import { Analytics } from '@vercel/analytics/react';
 import { GeistSans } from 'geist/font/sans';
 import type { Metadata, Viewport } from 'next';
 import { ThemeProvider } from 'next-themes';
-import { PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react';
 
 import { Header } from '@/components/header';
 import { Sonner } from '@/components/sonner';

@@ -1,4 +1,4 @@
-import { createEvents, DateArray, EventAttributes } from 'ics';
+import { createEvents, type DateArray, type EventAttributes } from 'ics';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
@@ -7,8 +7,8 @@ import {
   getClassDetails,
   getInstructorMeetingTimes,
   getSubjects
-} from '@/lib/ucm';
-import { InstructorMeetingTimesResponse } from '@/types/ucm';
+} from '@/lib/ucmerced';
+import type { InstructorMeetingTimesResponse } from '@/types/ucmerced';
 
 const schema = z.object({
   term: z.string(),
