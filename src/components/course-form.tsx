@@ -25,11 +25,12 @@ import { Switch } from './ui/switch';
 
 export function CourseForm({ children }: PropsWithChildren) {
   const [generating, setGenerating] = useState(false);
-  const [crns, setCrns] = useState(['']);
+  const [crns, setCRNs] = useState(['']);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setGenerating(true);
+
     fetch('/api/generate', {
       headers: { 'Content-Type': 'application/json' },
       method: 'POST',
@@ -46,12 +47,16 @@ export function CourseForm({ children }: PropsWithChildren) {
             if (result.error) {
               return toast.error(result.error);
             }
+
             const blob = new Blob([result.data], { type: 'text/calendar' });
+
             const link = document.createElement('a');
             link.setAttribute('href', URL.createObjectURL(blob));
             link.setAttribute('download', 'calendar.ics');
+
             document.body.appendChild(link);
             link.click();
+
             toast.success('Calendar generated!');
           })
           .catch(() => toast.error('Uh oh! An unexpected error occurred.'))
@@ -68,7 +73,7 @@ export function CourseForm({ children }: PropsWithChildren) {
       !value.length ||
       (!isNaN(Number(e.target.value)) && value.length <= 5)
     ) {
-      setCrns((prev) => {
+      setCRNs((prev) => {
         const values = [...prev];
         values[index] = value;
         return values;
@@ -76,7 +81,7 @@ export function CourseForm({ children }: PropsWithChildren) {
     }
   };
 
-  const addEntry = () => setCrns((prev) => [...prev, '']);
+  const addEntry = () => setCRNs((prev) => [...prev, '']);
 
   return (
     <form onSubmit={handleSubmit}>
@@ -109,11 +114,7 @@ export function CourseForm({ children }: PropsWithChildren) {
             ))}
           </div>
           <div className="flex items-center space-x-2 pt-2">
-            <Switch
-              name="condense"
-              defaultChecked={true}
-              id="condense-course-names"
-            />
+            <Switch id="condense-course-names" name="condense" defaultChecked />
             <div className="items-baseline gap-2 sm:flex">
               <Label htmlFor="condense-course-names">
                 Condense course names
@@ -127,9 +128,9 @@ export function CourseForm({ children }: PropsWithChildren) {
         <CardFooter className="flex-col-reverse gap-2 sm:flex-row sm:gap-6">
           <Button className="w-full" disabled={generating}>
             {generating ? (
-              <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+              <ReloadIcon className="mr-2 size-4 animate-spin" />
             ) : (
-              <CalendarIcon className="mr-2 h-4 w-4" />
+              <CalendarIcon className="mr-2 size-4" />
             )}{' '}
             Create my calendar
           </Button>
@@ -139,7 +140,7 @@ export function CourseForm({ children }: PropsWithChildren) {
             variant="outline"
             type="button"
           >
-            <PlusIcon className="mr-2 h-4 w-4" /> Add another course
+            <PlusIcon className="mr-2 size-4" /> Add another course
           </Button>
         </CardFooter>
       </Card>

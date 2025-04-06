@@ -14,7 +14,7 @@ import './globals.css';
 export const metadata: Metadata = {
   title: 'UC Merced iCalendar Tool',
   description:
-    'A simple tool for importing UC Merced course schedules into Apple Calendar, Google Calendar, and other calendars that accept ICS files.',
+    'A simple tool for importing your UC Merced course schedule into Apple Calendar, Google Calendar, and other calendars that accept .ics files.',
   icons: [
     {
       url: '/images/calendar.png',
