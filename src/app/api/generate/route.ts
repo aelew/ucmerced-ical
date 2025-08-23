@@ -295,10 +295,8 @@ function incrementDay(dateArray: [number, number, number, number, number]) {
 }
 
 function safeExtract(source: string, startToken: string, endToken: string) {
-  const startIndex = source.indexOf(startToken);
-  if (startIndex === -1) return undefined;
-  const afterStart = startIndex + startToken.length;
-  const endIndex = source.indexOf(endToken, afterStart);
-  if (endIndex === -1) return undefined;
-  return source.slice(afterStart, endIndex);
+  const parts = source.split(startToken);
+  if (parts.length < 2) return undefined;
+  const rest = parts[1].split(endToken);
+  return rest.length < 2 ? undefined : rest[0];
 }
