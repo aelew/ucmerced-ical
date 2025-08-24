@@ -9,8 +9,8 @@ import {
   getSubjects
 } from '@/lib/ucmerced';
 import type {
-  InstructorMeetingTimesResponse,
-  CodeDescriptionResponse
+  CodeDescriptionResponse,
+  InstructorMeetingTimesResponse
 } from '@/types/ucmerced';
 
 const schema = z.object({
@@ -64,6 +64,7 @@ export async function POST(request: Request) {
         { status: 422 }
       );
     }
+
     let classes;
     try {
       classes = await getInstructorMeetingTimes(term, crn);
@@ -77,10 +78,8 @@ export async function POST(request: Request) {
         { status: 422 }
       );
     }
-    courses.push({
-      details,
-      classes
-    });
+
+    courses.push({ details, classes });
   }
 
   let subjects: CodeDescriptionResponse = [];
@@ -89,7 +88,10 @@ export async function POST(request: Request) {
       subjects = await getSubjects(term);
     } catch {
       return NextResponse.json(
-        { error: 'Failed to load subjects for the selected term. Please try again.' },
+        {
+          error:
+            'Failed to load subjects for the selected term. Please try again.'
+        },
         { status: 422 }
       );
     }
@@ -100,16 +102,23 @@ export async function POST(request: Request) {
   for (const course of courses) {
     let courseTitle;
     if (condense) {
-      const subject = safeExtract(course.details, '<span id="subject">', '</span>');
+      const subject = safeExtract(
+        course.details,
+        '<span id="subject">',
+        '</span>'
+      );
+
       const subjectCode = subject
         ? subjects.find((s) => s.description === subject)?.code
         : undefined;
+
       if (subjectCode) {
         const courseNumber = safeExtract(
           course.details,
           '<span id="courseNumber">',
           '</span>'
         );
+
         if (courseNumber) {
           courseTitle = `${subjectCode} ${courseNumber}`;
         } else {
