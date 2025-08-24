@@ -8,7 +8,10 @@ import {
   getInstructorMeetingTimes,
   getSubjects
 } from '@/lib/ucmerced';
-import type { InstructorMeetingTimesResponse } from '@/types/ucmerced';
+import type {
+  CodeDescriptionResponse,
+  InstructorMeetingTimesResponse
+} from '@/types/ucmerced';
 
 const schema = z.object({
   term: z.string(),
@@ -61,37 +64,77 @@ export async function POST(request: Request) {
         { status: 422 }
       );
     }
-    courses.push({
-      details,
-      classes: await getInstructorMeetingTimes(term, crn)
-    });
+
+    let classes;
+    try {
+      classes = await getInstructorMeetingTimes(term, crn);
+    } catch {
+      return NextResponse.json(
+        {
+          error:
+            `Failed to locate instructor meeting times for CRN ${crn}. ` +
+            'Please check your CRN and try again.'
+        },
+        { status: 422 }
+      );
+    }
+
+    courses.push({ details, classes });
   }
 
-  const subjects = condense ? await getSubjects(term) : [];
+  let subjects: CodeDescriptionResponse = [];
+  if (condense) {
+    try {
+      subjects = await getSubjects(term);
+    } catch {
+      return NextResponse.json(
+        {
+          error:
+            'Failed to load subjects for the selected term. Please try again.'
+        },
+        { status: 422 }
+      );
+    }
+  }
 
   // Create an event for each class
   const eventData: EventAttributes[] = [];
   for (const course of courses) {
     let courseTitle;
     if (condense) {
-      const subject = course.details
-        .split('<span id="subject">')[1]
-        .split('</span>')[0];
-      const subjectCode = subjects.find((s) => s.description === subject)?.code;
+      const subject = safeExtract(
+        course.details,
+        '<span id="subject">',
+        '</span>'
+      );
+
+      const subjectCode = subject
+        ? subjects.find((s) => s.description === subject)?.code
+        : undefined;
+
       if (subjectCode) {
-        const courseNumber = course.details
-          .split('<span id="courseNumber">')[1]
-          .split('</span>')[0];
-        courseTitle = `${subjectCode} ${courseNumber}`;
+        const courseNumber = safeExtract(
+          course.details,
+          '<span id="courseNumber">',
+          '</span>'
+        );
+
+        if (courseNumber) {
+          courseTitle = `${subjectCode} ${courseNumber}`;
+        } else {
+          courseTitle =
+            safeExtract(course.details, '<span id="courseTitle">', '</span>') ??
+            'Course';
+        }
       } else {
-        courseTitle = course.details
-          .split('<span id="courseTitle">')[1]
-          .split('</span>')[0];
+        courseTitle =
+          safeExtract(course.details, '<span id="courseTitle">', '</span>') ??
+          'Course';
       }
     } else {
-      courseTitle = course.details
-        .split('<span id="courseTitle">')[1]
-        .split('</span>')[0];
+      courseTitle =
+        safeExtract(course.details, '<span id="courseTitle">', '</span>') ??
+        'Course';
     }
 
     for (const cls of course.classes) {
@@ -100,8 +143,8 @@ export async function POST(request: Request) {
       const startMins = parseInt(cls.meetingTime.beginTime.slice(2));
 
       const endDateParts = cls.meetingTime.endDate.split('/');
-      const endHour = parseInt(cls.meetingTime.beginTime.slice(0, 2));
-      const endMins = parseInt(cls.meetingTime.beginTime.slice(2));
+      const endHour = parseInt(cls.meetingTime.endTime.slice(0, 2));
+      const endMins = parseInt(cls.meetingTime.endTime.slice(2));
 
       const untilArray = incrementDay(
         convertUTCtoPST([
@@ -258,4 +301,11 @@ function incrementDay(dateArray: [number, number, number, number, number]) {
     // Increment the day and keep other fields unchanged
     return [year, month, day + 1, hour, minute];
   }
+}
+
+function safeExtract(source: string, startToken: string, endToken: string) {
+  const parts = source.split(startToken);
+  if (parts.length < 2) return undefined;
+  const rest = parts[1].split(endToken);
+  return rest.length < 2 ? undefined : rest[0];
 }
