@@ -101,6 +101,7 @@ export async function POST(request: Request) {
   const eventData: EventAttributes[] = [];
   for (const course of courses) {
     let courseTitle;
+
     if (condense) {
       const subject = safeExtract(
         course.details,
@@ -121,20 +122,14 @@ export async function POST(request: Request) {
 
         if (courseNumber) {
           courseTitle = `${subjectCode} ${courseNumber}`;
-        } else {
-          courseTitle =
-            safeExtract(course.details, '<span id="courseTitle">', '</span>') ??
-            'Course';
         }
-      } else {
-        courseTitle =
-          safeExtract(course.details, '<span id="courseTitle">', '</span>') ??
-          'Course';
       }
-    } else {
+    }
+
+    if (!courseTitle) {
       courseTitle =
         safeExtract(course.details, '<span id="courseTitle">', '</span>') ??
-        'Course';
+        'Untitled Course';
     }
 
     for (const cls of course.classes) {
